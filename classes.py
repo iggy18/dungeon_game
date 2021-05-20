@@ -44,22 +44,37 @@ class Room:
 class Dungeon:
 
     def __init__(self, rows, cols):
-     self.layout = [[Room() for i in range(cols)] for j in range(rows)]
+        self.layout = [[Room() for i in range(cols)] for j in range(rows)]
 
-    def show_map(self):
-        for row in self.layout:
-            x = ""
-            for col in row:
-                x += col.name
-            print(x)
-
-    def add_room(self, row, col, name):
+        def show_map(self):
+            for row in self.layout:
+                x = ""
+                for col in row:
+                    if 'player' in col.room:
+                        col.name = '[O] '
+                    if 'room' in col.room:
+                        col.name = '[ ] '
+                    if 'creature' in col.room:
+                        col.name = '[+] '
+                    x += col.name
+                print(x)
+    
+    def place(self, key, value, row, col):
+        '''
+        a key is passed in along with the object/value in a given location
+        '''
         location = self.layout[row][col]
-        location.name = name
-
-    def connect_rooms(self, row, col, n=None, s=None, e=None, w=None):
-        location = self.layout[row][col]
-        if location.north is not None:
-            location.north = location
+        if key == 'p':
+            location.room ['player'] = value
+        if key == 'c':
+            location.room['creature'] = value
+            
+def test():
+    x = Dungeon(8,8)
+    player = Player('seth')
+    creature = Creature()
+    x.place('p', player, 4, 4)
+    x.place('c', creature, 4, 5)
+    x.show_map()
 
     
