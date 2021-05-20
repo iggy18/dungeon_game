@@ -6,7 +6,7 @@ from classes import Player, Creature
 from colorama import init
 init()
 
-from colorama import Fore, Back, Style
+from colorama import Fore, Style
 
 
 player_name = input('greetings prisoner. what should I call you?\n > ')
@@ -39,17 +39,17 @@ innocent = 0
 run_away = False
 def morality_check(innocent, kill_count):
     if innocent == 0 and kill_count == 0:
-        print(Fore.CYAN + 'You didn\'t kill anything. did you not know how to play the game? how did you even get this score?')
+        print(Fore.CYAN + 'You didn\'t kill anything.\ndid you not know how to play the game?\nhow did you even get this score?')
     elif innocent == 0 and kill_count > 0:
-        print(Fore.CYAN + 'You didn\'t kill a single puppy or kitten. you are lawful good')
+        print(Fore.CYAN + 'You didn\'t kill a single puppy or kitten.\nyou are lawful good')
     elif kill_count > innocent:
-        print(Fore.CYAN + 'You killed more creatures than puppies and kittens. you were chaotic good')
+        print(Fore.CYAN + 'You killed more creatures than puppies and kittens.\nyou were chaotic good')
     elif kill_count < innocent:
-        print(Fore.CYAN + 'You killed more puppies and kittens than anything. you were chaotic evil.')
+        print(Fore.CYAN + 'You killed more puppies and kittens than anything.\nyou were chaotic evil.')
     elif kill_count == innocent:
-        print(Fore.CYAN + 'You were meticulous and thoughtful in your killing... you are clearly evil in it\'s purest form')
+        print(Fore.CYAN + 'You were meticulous and thoughtful in your killing...\nyou are clearly evil in it\'s purest form')
     elif kill_count == 0 and innocent > 0:
-        print(Fore.CYAN + 'You ONLY killed puppies and kittens. You are a monster. You are pure evil. there is a spot reserved for you in the brand new tenth circle of hell.')
+        print(Fore.CYAN + 'You ONLY killed puppies and kittens.\nYou are a monster.\nYou are pure evil.\nthere is a spot reserved for you in the brand new tenth circle of hell.')
     pass
 
 def fight(ent_a, ent_b):
@@ -71,18 +71,33 @@ def fight(ent_a, ent_b):
                 print(f'THE {ent_b.name} ATTACKED YOU FOR {ent_b.attack} DAMAGE!\n ')
                 print(Style.RESET_ALL)
                 time.sleep(1.5)
-                print(f'you have {player.health} health left...')
+                if ent_a.health >= 10:
+                    print(Fore.GREEN)
+                    print(f'you have {player.health} health left...')
+                    print(Style.RESET_ALL)
+
+                if ent_a.health >= 5 and ent_a.health < 10:
+                    print(Fore.YELLOW)
+                    print(f'you have {player.health} health left...')
+                    print(Style.RESET_ALL)
+
+                if ent_a.health < 5 and ent_a.health > 0:
+                    print(Fore.RED)
+                    print(f'you have {player.health} health left...')
+                    print(Style.RESET_ALL)
+
                 continue
+
             if ent_a.health < 0:
                 time.sleep(3)
-                print(Fore.RED + f'... welp. {ent_a.name}, you are super dead\n')
-                print(Style.RESET_ALL)
                 break
             ent_b.health -= math.ceil(ent_a.attack / ent_b.defense)
             time.sleep(1)
             print(Fore.GREEN + 'Your attack was successful!')
             time.sleep(1)
-            print(f'the {ent_b.name} has {ent_b.health} health left,\nand you have {ent_a.health} health left.\n ')
+            print(f'the {ent_b.name} has {ent_b.health} health left,')
+            time.sleep(1)
+            print(f'and you have {ent_a.health} health left.\n ')
             print(Style.RESET_ALL)
         else:
             time.sleep(1)
@@ -111,21 +126,26 @@ def game():
     else:
         run_away = True
         time.sleep(1)
-        print('\nfine, wimp. next creature then...\n ')
+        print(Fore.YELLOW + '\nfine, wimp. next creature then...\n ')
+        print(Style.RESET_ALL)
 
     if run_away == False and player.health > 0: 
         if creature.name == 'PUPPY' or creature.name == 'KITTEN' and player.health > 0:
             innocent += 1
             time.sleep(2)
-            print(f'congratulations. you killed the {creature.name}... you\'re aweful. You are a truely horrible person that deserves what fate has in store for you...\n ')
+            print(f'congratulations. you killed the {creature.name}... you\'re aweful.\nYou are a truely horrible person that deserves what fate has in store for you...\n ')
         else:   
             kill_count += 1
             time.sleep(2)
-            print(f'congratulations. you killed the {creature.name}... it seems as if this is not the creature that will end you life...\n ')
+            print(f'congratulations. you killed the {creature.name}...\nit seems as if this is not the creature that will end you life...\n ')
 
     run_away = False
 
     if player.health <= 0:
+        print(Fore.RED + '... welp.')
+        time.sleep(.5)
+        print(f'{player.name}, you are super dead\n')
+        print(Style.RESET_ALL)
         time.sleep(3)
         print(f'you had a good run, but your game is over....\n')
         time.sleep(3) 
