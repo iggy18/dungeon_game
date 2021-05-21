@@ -44,7 +44,7 @@ class Room:
 class Dungeon:
 
     def __init__(self, rows, cols):
-        self.layout = [[Room() for i in range(cols)] for j in range(rows)]
+        self.layout = [[Room() for i in range(cols+1)] for j in range(rows+1)]
 
         def show_map(self):
             for row in self.layout:
